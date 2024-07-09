@@ -1,5 +1,9 @@
+body {
+  background-color: #011222;
+}
 main {
   display: flex;
+  color: #fff5ea;
   align-items: center;
   justify-content: center;
   margin-top: 20%;
