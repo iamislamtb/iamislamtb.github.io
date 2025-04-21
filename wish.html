@@ -14,6 +14,21 @@
       position: relative;
     }
 
+    /* Hide scrollbar for all browsers */
+    html,
+    body {
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE/Edge */
+    }
+
+    /* WebKit browsers (Chrome, Safari) */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
     .stars {
       position: fixed;
       top: 0;
@@ -23,161 +38,92 @@
       pointer-events: none;
     }
 
-    .star {
-      position: absolute;
-      background-color: white;
-      border-radius: 50%;
-      animation: twinkle 4s infinite;
-    }
-
     .meteor {
       position: absolute;
-      width: 50px;
-      height: 2px;
-      background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
-      box-shadow: 0 0 10px 2px white;
-      opacity: 1;
-      transform-origin: right center;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+      animation: meteor-fall 6s linear infinite;
     }
 
-    @keyframes twinkle {
-
-      0%,
-      100% {
-        opacity: 0.2;
-      }
-
-      50% {
+    @keyframes meteor-fall {
+      0% {
+        transform: translateX(0) translateY(0);
         opacity: 1;
       }
-    }
 
-    .fade-transition {
-      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      100% {
+        transform: translateX(-150px) translateY(150px);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 
-<body class="font-sans text-white">
+<body>
   <div class="stars" id="stars"></div>
 
-  <div class="container mx-auto px-4 h-screen flex flex-col items-center justify-center relative z-10">
-    <!-- Initial wish form -->
-    <div id="wishForm" class="w-full flex flex-col items-center fade-transition">
-      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-8 tracking-wide animate-pulse">
-        Make a Wish
-      </h1>
+  <div class="flex flex-col items-center justify-center min-h-screen px-4" id="wishContainer">
+    <h1 class="text-4xl md:text-6xl text-white font-bold mb-10 text-center">Make a Wish</h1>
 
-      <div class="w-full max-w-md mx-auto">
-        <div class="relative">
-          <input id="wishInput" type="text" placeholder="Write your wish and press enter..."
-            class="w-full py-3 sm:py-4 px-5 sm:px-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 text-white placeholder-white/60 shadow-lg" />
-          <button id="wishButton"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 transition-all rounded-full p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Response after wish is made -->
-    <div id="wishResponse" class="w-full text-center opacity-0 hidden fade-transition">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide animate-pulse">
-        Let's see what's this year is hiding for you
-      </h2>
+    <div class="relative w-full max-w-md">
+      <input type="text" id="wishInput"
+        class="w-full py-3 px-4 pr-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+        placeholder="Enter your wish...">
+      <button id="wishButton"
+        class="absolute right-1 top-1 bottom-1 px-4 bg-white/30 hover:bg-white/40 rounded-full text-white font-medium transition-all">
+        Wish
+      </button>
     </div>
   </div>
 
+  <div class="hidden flex flex-col items-center justify-center min-h-screen px-4" id="resultContainer">
+    <h1 class="text-4xl md:text-6xl text-white font-bold text-center">Let's see what this year is hiding for you</h1>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const starsContainer = document.getElementById('stars');
-      const wishForm = document.getElementById('wishForm');
-      const wishResponse = document.getElementById('wishResponse');
-      const wishButton = document.getElementById('wishButton');
-      const wishInput = document.getElementById('wishInput');
+    // Create stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.classList.add('stars-item');
+      star.style.width = `${Math.random() * 3}px`;
+      star.style.height = star.style.width;
+      star.style.background = 'white';
+      star.style.borderRadius = '50%';
+      star.style.position = 'absolute';
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.opacity = `${Math.random() * 0.8 + 0.2}`;
+      star.style.animation = `twinkle ${Math.random() * 5 + 3}s infinite`;
+      starsContainer.appendChild(star);
+    }
 
-      // Handle wish submission
-      wishButton.addEventListener('click', handleWishSubmit);
-      wishInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-          handleWishSubmit();
-        }
-      });
-
-      function handleWishSubmit() {
-        // Hide the form
-        wishForm.style.opacity = '0';
-        wishForm.style.transform = 'translateY(-20px)';
-
-        setTimeout(() => {
-          wishForm.classList.add('hidden');
-          // Show the response
-          wishResponse.classList.remove('hidden');
-          setTimeout(() => {
-            wishResponse.style.opacity = '1';
-            wishResponse.style.transform = 'translateY(0)';
-          }, 50);
-        }, 500);
-      }
-
-      // Create twinkling stars
-      for (let i = 0; i < 200; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-
-        const size = Math.random() * 3;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.animationDelay = `${Math.random() * 4}s`;
-
-        starsContainer.appendChild(star);
-      }
-
-      // Create meteors
-      setInterval(createMeteor, 2000);
-    });
-
-    function createMeteor() {
+    // Create meteors
+    const createMeteor = () => {
       const meteor = document.createElement('div');
-      meteor.className = 'meteor';
+      meteor.classList.add('meteor');
+      meteor.style.top = `${Math.random() * 50}%`;
+      meteor.style.left = `${Math.random() * 100 + 10}%`;
+      meteor.style.animationDelay = `${Math.random() * 6}s`;
+      starsContainer.appendChild(meteor);
 
-      // Start from the top portion of the screen
-      const startX = Math.random() * window.innerWidth;
-      const startY = Math.random() * (window.innerHeight / 3);
-
-      meteor.style.left = `${startX}px`;
-      meteor.style.top = `${startY}px`;
-
-      // Calculate angle (diagonal falling angle)
-      const angle = 45 + (Math.random() * 10 - 5); // 40-50 degrees
-      meteor.style.transform = `rotate(${angle}deg)`;
-
-      // Dynamic animation
-      const duration = 1 + Math.random() * 2;
-      const distance = Math.max(window.innerWidth, window.innerHeight);
-
-      meteor.animate([
-        { opacity: 1, width: '50px' },
-        { opacity: 0, width: '100px', transform: `translateX(${distance * Math.cos(angle * Math.PI / 180)}px) translateY(${distance * Math.sin(angle * Math.PI / 180)}px) rotate(${angle}deg)` }
-      ], {
-        duration: duration * 1000,
-        easing: 'linear',
-        fill: 'forwards'
-      });
-
-      document.body.appendChild(meteor);
-
+      // Remove meteor after animation
       setTimeout(() => {
         meteor.remove();
-      }, duration * 1000);
-    }
+      }, 6000);
+    };
+
+    // Create meteors at intervals
+    setInterval(createMeteor, 1000);
+
+    // Handle wish button click
+    document.getElementById('wishButton').addEventListener('click', function () {
+      document.getElementById('wishContainer').classList.add('hidden');
+      document.getElementById('resultContainer').classList.remove('hidden');
+    });
   </script>
 </body>
 
