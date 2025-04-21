@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Birthday Letter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FFD1DC;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      background-image: linear-gradient(45deg, #FFD1DC 25%, #fff 25%, #fff 50%, #FFD1DC 50%, #FFD1DC 75%, #fff 75%, #fff 100%);
+      background-size: 40px 40px;
+    }
+
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      height: 250px;
+      margin: 50px auto;
+      perspective: 1000px;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      z-index: 10;
+    }
+
+    .envelope.open {
+      transform: rotateX(180deg);
+      z-index: 1;
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 1s, opacity 0.5s 0.5s, visibility 0s 1.5s;
+    }
+
+    .front,
+    .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #FF8FAB;
+      border: 2px solid #FF007F;
+      border-radius: 5px;
+      backface-visibility: hidden;
+    }
+
+    .front {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+    }
+
+    .front::before {
+      content: "❤";
+      color: #FF007F;
+      font-size: 36px;
+    }
+
+    .back {
+      transform: rotateX(180deg);
+    }
+
+    .letter {
+      position: absolute;
+      width: 90%;
+      max-width: 600px;
+      height: auto;
+      min-height: 450px;
+      background-color: #fff;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      overflow: auto;
+      text-align: left;
+      opacity: 0;
+      transition: transform 1s ease, opacity 1s ease;
+      z-index: 1;
+      box-sizing: border-box;
+    }
+
+    .envelope.open+.letter {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    h1 {
+      color: #FF007F;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .signature {
+      font-style: italic;
+      text-align: right;
+      margin-top: 30px;
+      color: #FF007F;
+    }
+
+    .instructions {
+      margin-top: 20px;
+      color: #FF007F;
+      font-size: 18px;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .envelope-wrapper {
+        height: 200px;
+      }
+
+      .letter {
+        min-height: 350px;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .envelope-wrapper {
+        height: 150px;
+        margin: 30px auto;
+      }
+
+      .letter {
+        padding: 15px;
+        min-height: 300px;
+      }
+
+      .instructions {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="envelope-wrapper">
+      <div class="envelope">
+        <div class="front"></div>
+        <div class="back"></div>
+      </div>
+      <div class="letter">
+        <h1>Hey There,</h1>
+        <p>i am writing this letter for you as modifying the website now because i made this one for you last year and i
+          wanted you to see it at the time but what happened have happened and i've still got my bestfriend besides me
+        </p>
+        <p>first of all i wanted to say that it's been the greatest pleasure knowing you and i've had the most
+          wonderful,
+          funniest and enjoyable 2 years of my life with you, i wanted to thank you for all the troublesome
+          you to go with me and i hope that what comes next in your life will be much better than you'll ever imagine
+        </p>
+        <p>i know that we have grown distant from each other in the last months but even then random moments from you
+          keeps appearing in my head, a laugh, a giggle and sometimes all the apologies you made when the conversation
+          went silent</p>
+        <p>i'm not here writing to mourne what was but to celebrate what's coming and i know what's for you is looking
+          brighter than the burning of a thousand suns and i wish all your hopes and dreams come true</p>
+        <p>Happy Birthday!</p>
+        <div class="signature">With love,<br>Islam</div>
+      </div>
+    </div>
+  </div>
+  <a href="wish.html" class="wish-button">🌠 make a wish</a>
+  <style>
+    .wish-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #FF007F;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      z-index: 100;
+    }
+
+    .wish-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive styles for the wish button */
+    @media (max-width: 768px) {
+      .wish-button {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .wish-button {
+        padding: 8px 14px;
+        font-size: 12px;
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+  </style>
+  <script>
+    document.querySelector('.envelope').addEventListener('click', function () {
+      this.classList.toggle('open');
+    });
+  </script>
+</body>
+
+</html>
